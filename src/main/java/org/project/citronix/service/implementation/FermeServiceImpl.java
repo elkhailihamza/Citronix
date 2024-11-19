@@ -1,28 +1,17 @@
 package org.project.citronix.service.implementation;
 
 import org.project.citronix.entity.Ferme;
-import org.project.citronix.service.FermeService;
+import org.project.citronix.repository.FermeRepository;
 
 import java.util.List;
+import java.util.Optional;
 
-public class FermeServiceImpl implements FermeService {
-    @Override
-    public Ferme save(Ferme entity) {
-        return null;
+public class FermeServiceImpl extends GenericServiceImpl<Ferme, Long> {
+    private final FermeRepository repository;
+
+    public FermeServiceImpl(FermeRepository repository) {
+        super(repository);
+        this.repository = repository;
     }
 
-    @Override
-    public Ferme findById(Long aLong) {
-        return null;
-    }
-
-    @Override
-    public List<Ferme> findAll() {
-        return List.of();
-    }
-
-    @Override
-    public void deleteById(Long aLong) {
-
-    }
 }

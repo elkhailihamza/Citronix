@@ -1,28 +1,20 @@
 package org.project.citronix.service.implementation;
 
 import org.project.citronix.entity.Champ;
-import org.project.citronix.service.ChampService;
+import org.project.citronix.repository.ChampRepository;
+import org.project.citronix.service.GenericService;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
-public class ChampServiceImpl implements ChampService {
-    @Override
-    public Champ save(Champ entity) {
-        return null;
+@Service
+public class ChampServiceImpl extends GenericServiceImpl<Champ, Long> {
+    private final ChampRepository repository;
+
+    public ChampServiceImpl(ChampRepository repository) {
+        super(repository);
+        this.repository = repository;
     }
 
-    @Override
-    public Champ findById(Long aLong) {
-        return null;
-    }
-
-    @Override
-    public List<Champ> findAll() {
-        return List.of();
-    }
-
-    @Override
-    public void deleteById(Long aLong) {
-
-    }
 }

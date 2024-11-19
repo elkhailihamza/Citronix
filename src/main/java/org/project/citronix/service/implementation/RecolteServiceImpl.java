@@ -1,28 +1,20 @@
 package org.project.citronix.service.implementation;
 
 import org.project.citronix.entity.Recolte;
-import org.project.citronix.service.RecolteService;
+import org.project.citronix.repository.RecolteRepository;
+import org.project.citronix.service.GenericService;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
-public class RecolteServiceImpl implements RecolteService {
-    @Override
-    public Recolte save(Recolte entity) {
-        return null;
-    }
+@Service
+public class RecolteServiceImpl extends GenericServiceImpl<Recolte, Long> {
+    private final RecolteRepository repository;
 
-    @Override
-    public Recolte findById(Long aLong) {
-        return null;
-    }
-
-    @Override
-    public List<Recolte> findAll() {
-        return List.of();
-    }
-
-    @Override
-    public void deleteById(Long aLong) {
-
+    public RecolteServiceImpl(RecolteRepository repository) {
+        super(repository);
+        this.repository = repository;
     }
 }
