@@ -35,6 +35,8 @@ public class FermeService extends GenericServiceImpl<Ferme, Long> {
     public ResponseEntity<?> updateFerme(Ferme ferme, long id) {
         Optional<Ferme> oldFerme = findById(id);
         if (oldFerme.isPresent()) {
+            ferme.setId(id);
+            ferme.setDate_de_creation(oldFerme.get().getDate_de_creation());
             save(ferme);
             return ResponseEntity.ok("Ferme updated!");
         }
@@ -49,5 +51,14 @@ public class FermeService extends GenericServiceImpl<Ferme, Long> {
             return ResponseEntity.ok("Ferme deleted!");
         }
         return null; // throw EntityNotFound exception
+    }
+
+    public Ferme fermeDetailsById(long id) {
+        Optional<Ferme> ferme = findById(id);
+        return ferme.orElse(null); // throw EntityNotFound exception. use orElseThrow(() -> new EntityNotFoundException("Farm not found!") )
+    }
+
+    public FermeDTO toFermeDTO(Ferme ferme) {
+        return fermeMapper.toEntityDTO(ferme);
     }
 }
