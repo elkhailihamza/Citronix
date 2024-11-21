@@ -6,21 +6,20 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
-
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-public class Client {
+public class RecolteDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    private String nom;
-    private String pass_word;
-    private String email;
+    private int quantite;
 
-    @OneToMany(mappedBy = "client")
-    private List<Vente> ventes;
+    @ManyToOne
+    private Recolte recolte;
+
+    @ManyToOne
+    private Arbre arbre;
 }

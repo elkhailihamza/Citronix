@@ -17,5 +17,5 @@ public class Arbre {
     private Champ champ;
 
     @OneToMany(mappedBy = "arbre")
-    private List<Recolte> recoltes;
+    private List<RecolteDetails> recolteDetails;
 }
