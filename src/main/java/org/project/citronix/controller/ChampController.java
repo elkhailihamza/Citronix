@@ -36,4 +36,10 @@ public class ChampController {
         champService.deleteChamp(champDTO);
         return ResponseEntity.ok("Deleted successfully!");
     }
+
+    @PostMapping("/associate/{id}")
+    public ResponseEntity<ChampDTO> associateChampToFerme(@RequestBody @Validated(ChampDTO.Associate.class) ChampDTO champDTO) {
+        return ResponseEntity.ok(champService.associateToFerme(champDTO));
+    }
+
 }

@@ -5,8 +5,8 @@ import jakarta.transaction.Transactional;
 import org.project.citronix.dto.ChampDTO;
 import org.project.citronix.dto.mapper.ChampMapper;
 import org.project.citronix.entity.Champ;
+import org.project.citronix.entity.Ferme;
 import org.project.citronix.repository.ChampRepository;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -57,10 +57,21 @@ public class ChampService extends GenericServiceImpl<Champ, Long> {
 
     @Transactional
     public void deleteChamp(ChampDTO champDTO) {
-        Optional<Champ> champ = findById(champDTO.getId());
         if (findById(champDTO.getId()).isEmpty()) {
             throw new EntityNotFoundException();
         }
         deleteById(champDTO.getId());
+    }
+
+    @Transactional
+    public ChampDTO associateToFerme(ChampDTO champDTO) {
+        Optional<Champ> oldChamp = findById(champDTO.getId());
+        if (oldChamp.isPresent()) {
+            Champ newChamp = oldChamp.get();
+            Ferme ferme = Ferme.builder().id(champDTO.getFermeId()).build();
+            newChamp.setFerme(ferme);
+            return updateChamp(toChampDTO(newChamp));
+        }
+        throw new EntityNotFoundException();
     }
 }
