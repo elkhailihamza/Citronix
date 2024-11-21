@@ -18,7 +18,7 @@ public class Ferme {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String nom;
-    private String superficie;
+    private double superficie;
     private String localisation;
     private LocalDateTime date_de_creation;
 

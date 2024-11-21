@@ -17,7 +17,7 @@ public class Champ {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    private String superficie;
+    private double superficie;
 
     @ManyToOne
     private Ferme ferme;
