@@ -3,14 +3,14 @@ package org.project.citronix.service.implementation;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.project.citronix.dto.ArbreDTO;
-import org.project.citronix.dto.ChampDTO;
 import org.project.citronix.dto.mapper.ArbreMapper;
 import org.project.citronix.entity.Arbre;
 import org.project.citronix.entity.Champ;
-import org.project.citronix.exception.SuperficieNonCompatible;
 import org.project.citronix.repository.ArbreRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.Period;
 import java.util.Optional;
 
 @Service
@@ -63,7 +63,12 @@ public class ArbreService extends GenericServiceImpl<Arbre, Long> {
 
     public ArbreDTO arbreDetailsById(long id) {
         Optional<Arbre> arbre = findById(id);
-        return arbre.map(this::toArbreDTO).orElseThrow(EntityNotFoundException::new);
+        return arbre.map(a -> {
+            ArbreDTO arbreDTO = toArbreDTO(a);
+            Period period = Period.between(a.getDate_de_plantation().toLocalDate(), LocalDate.now());
+            arbreDTO.setAge(period.getYears());
+            return arbreDTO;
+        }).orElseThrow(EntityNotFoundException::new);
     }
 
     @Transactional

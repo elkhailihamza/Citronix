@@ -5,5 +5,7 @@ import org.project.citronix.dto.ArbreDTO;
 import org.project.citronix.entity.Arbre;
 
 @Mapper(componentModel = "spring")
-public interface ArbreMapper extends GenericMapper<Arbre, ArbreDTO>{
+public interface ArbreMapper {
+    Arbre toEntity(ArbreDTO entityDTO);
+    ArbreDTO toEntityDTO(Arbre entity);
 }

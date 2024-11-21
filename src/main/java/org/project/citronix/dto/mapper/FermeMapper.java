@@ -5,5 +5,7 @@ import org.project.citronix.dto.FermeDTO;
 import org.project.citronix.entity.Ferme;
 
 @Mapper(componentModel = "spring")
-public interface FermeMapper extends GenericMapper<Ferme, FermeDTO> {
+public interface FermeMapper {
+    Ferme toEntity(FermeDTO entityDTO);
+    FermeDTO toEntityDTO(Ferme entity);
 }
