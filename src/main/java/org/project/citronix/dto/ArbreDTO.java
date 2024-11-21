@@ -25,12 +25,12 @@ public class ArbreDTO {
     private long id;
 
     @NotNull(message = "Date de plantation mustn't be null!", groups = {Create.class, Update.class})
-    @Future(message = "Date mustn't be in the future!", groups = {Create.class, Update.class})
+    @Past(message = "Date mustn't be in the future!", groups = {Create.class, Update.class})
     private LocalDateTime date_de_plantation;
 
     private int age;
 
-    @NotNull(message = "Champ id mustn't be null!", groups = {Association.class})
+    @NotNull(message = "Champ id mustn't be null!", groups = {Association.class, Update.class})
     private long champId;
 
     private List<RecolteDetails> recolteDetails;
