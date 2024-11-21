@@ -2,10 +2,13 @@ package org.project.citronix.service.implementation;
 
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
 import org.project.citronix.dto.ChampDTO;
+import org.project.citronix.dto.FermeDTO;
 import org.project.citronix.dto.mapper.ChampMapper;
 import org.project.citronix.entity.Champ;
 import org.project.citronix.entity.Ferme;
+import org.project.citronix.exception.SuperficieNonCompatible;
 import org.project.citronix.repository.ChampRepository;
 import org.springframework.stereotype.Service;
 
@@ -15,11 +18,13 @@ import java.util.Optional;
 public class ChampService extends GenericServiceImpl<Champ, Long> {
     private final ChampRepository repository;
     private final ChampMapper champMapper;
+    private final FermeService fermeService;
 
-    public ChampService(ChampRepository repository, ChampMapper champMapper) {
+    public ChampService(ChampRepository repository, ChampMapper champMapper, FermeService fermeService) {
         super(repository);
         this.repository = repository;
         this.champMapper = champMapper;
+        this.fermeService = fermeService;
     }
 
     public Champ toChamp(ChampDTO champDTO) {
@@ -65,13 +70,34 @@ public class ChampService extends GenericServiceImpl<Champ, Long> {
 
     @Transactional
     public ChampDTO associateToFerme(ChampDTO champDTO) {
-        Optional<Champ> oldChamp = findById(champDTO.getId());
-        if (oldChamp.isPresent()) {
-            Champ newChamp = oldChamp.get();
-            Ferme ferme = Ferme.builder().id(champDTO.getFermeId()).build();
-            newChamp.setFerme(ferme);
-            return updateChamp(toChampDTO(newChamp));
+        Optional<Champ> champ = findById(champDTO.getId());
+        Optional<Ferme> ferme = fermeService.findById(champDTO.getFermeId());
+        if (champ.isPresent() && ferme.isPresent()) {
+            FermeDTO fermeDTO = fermeService.toFermeDTO(ferme.get());
+            checkIfSuperficieIsCompatible(fermeDTO, champDTO);
+            champ.get().setFerme(ferme.get());
+            return updateChamp(toChampDTO(champ.get()));
         }
         throw new EntityNotFoundException();
+    }
+
+    private void checkIfSuperficieIsCompatible(FermeDTO fermeDTO, ChampDTO champDTO) {
+        boolean compatible = true;
+        String reason = "";
+        double halfSuperficie = fermeDTO.getSuperficie() * 50/100;
+        if (champDTO.getSuperficie() > halfSuperficie) {
+            compatible = false;
+            reason = "Champ superficie surpasses 50% of ferme total superficie!";
+        }
+
+        double spaceTaken = repository.sumAllChampSuperficieByFermeId(fermeDTO.getId());
+        if (fermeDTO.getSuperficie() > champDTO.getSuperficie() + spaceTaken) {
+            compatible = false;
+            reason = "The surface area of the Champ exceeds the available space in the Ferme.";
+        }
+
+        if (!compatible) {
+            throw new SuperficieNonCompatible(reason);
+        }
     }
 }
