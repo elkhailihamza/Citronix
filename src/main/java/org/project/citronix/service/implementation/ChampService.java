@@ -91,7 +91,7 @@ public class ChampService extends GenericServiceImpl<Champ, Long> {
         }
 
         double spaceTaken = repository.sumAllChampSuperficieByFermeId(fermeDTO.getId());
-        if (fermeDTO.getSuperficie() > champDTO.getSuperficie() + spaceTaken) {
+        if (fermeDTO.getSuperficie() < champDTO.getSuperficie() + spaceTaken) {
             compatible = false;
             reason = "The surface area of the Champ exceeds the available space in the Ferme.";
         }

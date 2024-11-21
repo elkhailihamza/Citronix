@@ -23,7 +23,7 @@ public class FermeController {
 
     @PutMapping("/update")
     public ResponseEntity<?> updateFerme(@RequestBody @Validated(FermeDTO.Update.class) FermeDTO fermeDTO) {
-        return fermeService.updateFerme(fermeDTO);
+        return ResponseEntity.ok(fermeService.updateFerme(fermeDTO));
     }
 
     @DeleteMapping("/delete")

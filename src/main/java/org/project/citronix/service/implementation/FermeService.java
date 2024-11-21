@@ -37,14 +37,14 @@ public class FermeService extends GenericServiceImpl<Ferme, Long> {
     }
 
     @Transactional
-    public ResponseEntity<?> updateFerme(FermeDTO fermeDTO) {
+    public FermeDTO updateFerme(FermeDTO fermeDTO) {
         Ferme ferme = toFerme(fermeDTO);
         Optional<Ferme> oldFerme = findById(ferme.getId());
         if (oldFerme.isPresent()) {
             ferme.setId(ferme.getId());
             ferme.setDate_de_creation(oldFerme.get().getDate_de_creation());
             save(ferme);
-            return ResponseEntity.ok("Ferme updated!");
+            return toFermeDTO(ferme);
         }
         throw new EntityNotFoundException();
     }
