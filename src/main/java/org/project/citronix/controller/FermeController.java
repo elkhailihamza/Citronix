@@ -21,14 +21,15 @@ public class FermeController {
         return fermeService.createNewFerme(ferme);
     }
 
-    @PutMapping("/update/{id}")
-    public ResponseEntity<?> updateFerme(@PathVariable long id, @RequestBody @Validated(FermeDTO.Update.class) FermeDTO fermeDTO) {
-        return fermeService.updateFerme(fermeDTO, id);
+    @PutMapping("/update")
+    public ResponseEntity<?> updateFerme(@RequestBody @Validated(FermeDTO.Update.class) FermeDTO fermeDTO) {
+        return fermeService.updateFerme(fermeDTO);
     }
 
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<?> deleteFerme(@PathVariable long id) {
-        return fermeService.deleteFerme(id);
+    @DeleteMapping("/delete")
+    public ResponseEntity<?> deleteFerme(@RequestBody @Validated(FermeDTO.Delete.class) FermeDTO fermeDTO) {
+        fermeService.deleteFerme(fermeDTO);
+        return ResponseEntity.ok("Deleted successfully!");
     }
 
     @GetMapping("/{id}/details")

@@ -2,7 +2,6 @@ package org.project.citronix.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.project.citronix.dto.ChampDTO;
-import org.project.citronix.entity.Champ;
 import org.project.citronix.service.implementation.ChampService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -20,9 +19,9 @@ public class ChampController {
         return ResponseEntity.ok(champService.createNewChamp(champDTO));
     }
 
-    @PutMapping("/update/{id}")
-    public ResponseEntity<ChampDTO> updateChamp(@PathVariable long id, @RequestBody @Validated(ChampDTO.Update.class) ChampDTO champDTO) {
-        ChampDTO champDTOUpdated = champService.updateChamp(champDTO, id);
+    @PutMapping("/update")
+    public ResponseEntity<ChampDTO> updateChamp(@RequestBody @Validated(ChampDTO.Update.class) ChampDTO champDTO) {
+        ChampDTO champDTOUpdated = champService.updateChamp(champDTO);
         return ResponseEntity.ok(champDTOUpdated);
     }
 
@@ -32,15 +31,9 @@ public class ChampController {
         return ResponseEntity.ok(champDTO);
     }
 
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<?> deleteChamp(@PathVariable long id) {
-        champService.deleteChamp(id);
+    @DeleteMapping("/delete")
+    public ResponseEntity<?> deleteChamp(@RequestBody @Validated(ChampDTO.Delete.class) ChampDTO champDTO) {
+        champService.deleteChamp(champDTO);
         return ResponseEntity.ok("Deleted successfully!");
-    }
-
-    @PostMapping("/associate/{id}")
-    public ResponseEntity<?> associateChampToFerme(@PathVariable long id, @RequestBody @Validated(ChampDTO.Associate.class) ChampDTO champDTO) {
-        ChampDTO champDTOAssociated = champService.associateToFerme();
-        return ResponseEntity.ok("Associated successfully");
     }
 }

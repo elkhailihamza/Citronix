@@ -1,5 +1,6 @@
 package org.project.citronix.service.implementation;
 
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.project.citronix.dto.FermeDTO;
 import org.project.citronix.dto.mapper.FermeMapper;
@@ -36,30 +37,28 @@ public class FermeService extends GenericServiceImpl<Ferme, Long> {
     }
 
     @Transactional
-    public ResponseEntity<?> updateFerme(FermeDTO fermeDTO, long id) {
+    public ResponseEntity<?> updateFerme(FermeDTO fermeDTO) {
         Ferme ferme = toFerme(fermeDTO);
-        Optional<Ferme> oldFerme = findById(id);
+        Optional<Ferme> oldFerme = findById(ferme.getId());
         if (oldFerme.isPresent()) {
-            ferme.setId(id);
+            ferme.setId(ferme.getId());
             ferme.setDate_de_creation(oldFerme.get().getDate_de_creation());
             save(ferme);
             return ResponseEntity.ok("Ferme updated!");
         }
-        return null; // throw EntityNotFound exception
+        throw new EntityNotFoundException();
     }
 
     @Transactional
-    public ResponseEntity<?> deleteFerme(long id) {
-        Optional<Ferme> oldFerme = findById(id);
-        if (oldFerme.isPresent()) {
-            deleteById(id);
-            return ResponseEntity.ok("Ferme deleted!");
+    public void deleteFerme(FermeDTO fermeDTO) {
+        if (findById(fermeDTO.getId()).isEmpty()) {
+            throw new EntityNotFoundException();
         }
-        return null; // throw EntityNotFound exception
+        deleteById(fermeDTO.getId());
     }
 
     public FermeDTO fermeDetailsById(long id) {
         Optional<Ferme> ferme = findById(id);
-        return ferme.map(this::toFermeDTO).orElse(null); // throw EntityNotFound exception. use orElseThrow(() -> new EntityNotFoundException("Farm not found!") )
+        return ferme.map(this::toFermeDTO).orElseThrow(EntityNotFoundException::new);
     }
 }
