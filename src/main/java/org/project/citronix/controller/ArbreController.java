@@ -36,4 +36,9 @@ public class ArbreController {
         arbreService.deleteArbre(arbreDTO);
         return ResponseEntity.ok("Deleted successfully!");
     }
+
+    @PostMapping("/associate/{id}")
+    public ResponseEntity<ArbreDTO> associateArbreToChamp(@RequestBody @Validated(ArbreDTO.Association.class) ArbreDTO arbreDTO) {
+        return ResponseEntity.ok(arbreService.associateToChamp(arbreDTO));
+    }
 }
