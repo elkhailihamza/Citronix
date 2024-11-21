@@ -67,7 +67,7 @@ public class ArbreService extends GenericServiceImpl<Arbre, Long> {
     }
 
     @Transactional
-    public ArbreDTO associateToArbre(ArbreDTO arbreDTO) {
+    public ArbreDTO associateToChamp(ArbreDTO arbreDTO) {
         Optional<Arbre> arbre = findById(arbreDTO.getId());
         Optional<Champ> champ = champService.findById(arbreDTO.getChampId());
         if (arbre.isPresent() && champ.isPresent()) {
