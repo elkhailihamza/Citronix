@@ -2,13 +2,12 @@ package org.project.citronix.service.implementation;
 
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
-import jakarta.validation.Valid;
 import org.project.citronix.dto.ChampDTO;
 import org.project.citronix.dto.FermeDTO;
 import org.project.citronix.dto.mapper.ChampMapper;
 import org.project.citronix.entity.Champ;
 import org.project.citronix.entity.Ferme;
-import org.project.citronix.exception.SuperficieNonCompatible;
+import org.project.citronix.exception.SuperficieNonCompatibleException;
 import org.project.citronix.repository.ChampRepository;
 import org.springframework.stereotype.Service;
 
@@ -97,7 +96,7 @@ public class ChampService extends GenericServiceImpl<Champ, Long> {
         }
 
         if (!compatible) {
-            throw new SuperficieNonCompatible(reason);
+            throw new SuperficieNonCompatibleException(reason);
         }
     }
 }

@@ -17,9 +17,15 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(exceptionDetails, HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(SuperficieNonCompatible.class)
-    public ResponseEntity<ExceptionDetails> handleEntityNotFoundException(SuperficieNonCompatible ex, WebRequest request) {
+    @ExceptionHandler(SuperficieNonCompatibleException.class)
+    public ResponseEntity<ExceptionDetails> handleEntityNotFoundException(SuperficieNonCompatibleException ex, WebRequest request) {
         ExceptionDetails exceptionDetails = new ExceptionDetails(ex.getMessage(), new Date(), request.getDescription(false));
         return new ResponseEntity<>(exceptionDetails, HttpStatus.UNPROCESSABLE_ENTITY);
+    }
+
+    @ExceptionHandler(ValueNotExpectedException.class)
+    public ResponseEntity<ExceptionDetails> handleValueNotExpectedException(ValueNotExpectedException ex, WebRequest request) {
+        ExceptionDetails exceptionDetails = new ExceptionDetails(ex.getMessage(), new Date(), request.getDescription(false));
+        return new ResponseEntity<>(exceptionDetails, HttpStatus.NOT_ACCEPTABLE);
     }
 }

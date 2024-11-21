@@ -1,7 +1,10 @@
 package org.project.citronix.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.project.citronix.dto.ArbreDTO;
+import org.project.citronix.dto.ArbreProductionDTO;
+import org.project.citronix.entity.Arbre;
 import org.project.citronix.service.implementation.ArbreService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -37,8 +40,14 @@ public class ArbreController {
         return ResponseEntity.ok("Deleted successfully!");
     }
 
-    @PostMapping("/associate/{id}")
+    @PostMapping("/associate")
     public ResponseEntity<ArbreDTO> associateArbreToChamp(@RequestBody @Validated(ArbreDTO.Association.class) ArbreDTO arbreDTO) {
         return ResponseEntity.ok(arbreService.associateToChamp(arbreDTO));
+    }
+
+    @GetMapping("/annual/production")
+    public ResponseEntity<ArbreProductionDTO> annualProduction(@RequestBody @Valid ArbreProductionDTO arbreProductionDTO) {
+        ArbreProductionDTO arbreProduction = arbreService.calcYearlyProduction(arbreProductionDTO);
+        return ResponseEntity.ok(arbreProduction);
     }
 }
