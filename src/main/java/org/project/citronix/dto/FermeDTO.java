@@ -18,10 +18,7 @@ import java.util.List;
 public class FermeDTO {
     public interface Create extends Default {};
     public interface Update extends Default {};
-    public interface Delete extends Default {};
 
-    @NotNull(groups = Delete.class)
-    @NotBlank(groups = Delete.class)
     private long id;
 
     @NotNull(message = "Nom needs to not be null!", groups = {Create.class, Update.class})

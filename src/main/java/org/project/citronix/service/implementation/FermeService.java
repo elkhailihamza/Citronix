@@ -25,6 +25,10 @@ public class FermeService extends GenericServiceImpl<Ferme, Long> {
         return fermeMapper.toEntity(fermeDTO);
     }
 
+    public FermeDTO toFermeDTO(Ferme ferme) {
+        return fermeMapper.toEntityDTO(ferme);
+    }
+
     @Transactional
     public ResponseEntity<?> createNewFerme(Ferme ferme) {
         save(ferme);
@@ -32,7 +36,8 @@ public class FermeService extends GenericServiceImpl<Ferme, Long> {
     }
 
     @Transactional
-    public ResponseEntity<?> updateFerme(Ferme ferme, long id) {
+    public ResponseEntity<?> updateFerme(FermeDTO fermeDTO, long id) {
+        Ferme ferme = toFerme(fermeDTO);
         Optional<Ferme> oldFerme = findById(id);
         if (oldFerme.isPresent()) {
             ferme.setId(id);
@@ -53,12 +58,8 @@ public class FermeService extends GenericServiceImpl<Ferme, Long> {
         return null; // throw EntityNotFound exception
     }
 
-    public Ferme fermeDetailsById(long id) {
+    public FermeDTO fermeDetailsById(long id) {
         Optional<Ferme> ferme = findById(id);
-        return ferme.orElse(null); // throw EntityNotFound exception. use orElseThrow(() -> new EntityNotFoundException("Farm not found!") )
-    }
-
-    public FermeDTO toFermeDTO(Ferme ferme) {
-        return fermeMapper.toEntityDTO(ferme);
+        return ferme.map(this::toFermeDTO).orElse(null); // throw EntityNotFound exception. use orElseThrow(() -> new EntityNotFoundException("Farm not found!") )
     }
 }
