@@ -3,8 +3,11 @@ package org.project.citronix.service.implementation;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.project.citronix.dto.ArbreDTO;
+import org.project.citronix.dto.ChampDTO;
 import org.project.citronix.dto.mapper.ArbreMapper;
 import org.project.citronix.entity.Arbre;
+import org.project.citronix.entity.Champ;
+import org.project.citronix.exception.SuperficieNonCompatible;
 import org.project.citronix.repository.ArbreRepository;
 import org.springframework.stereotype.Service;
 
@@ -14,11 +17,13 @@ import java.util.Optional;
 public class ArbreService extends GenericServiceImpl<Arbre, Long> {
     private final ArbreRepository repository;
     private final ArbreMapper arbreMapper;
+    private final ChampService champService;
 
-    public ArbreService(ArbreRepository repository, ArbreMapper arbreMapper) {
+    public ArbreService(ArbreRepository repository, ArbreMapper arbreMapper, ChampService champService) {
         super(repository);
         this.repository = repository;
         this.arbreMapper = arbreMapper;
+        this.champService = champService;
     }
 
     public Arbre toArbre(ArbreDTO arbreDTO) {
@@ -60,5 +65,17 @@ public class ArbreService extends GenericServiceImpl<Arbre, Long> {
         Optional<Arbre> arbre = findById(id);
         return arbre.map(this::toArbreDTO).orElseThrow(EntityNotFoundException::new);
     }
+
+    @Transactional
+    public ArbreDTO associateToArbre(ArbreDTO arbreDTO) {
+        Optional<Arbre> arbre = findById(arbreDTO.getId());
+        Optional<Champ> champ = champService.findById(arbreDTO.getChampId());
+        if (arbre.isPresent() && champ.isPresent()) {
+            arbre.get().setChamp(champ.get());
+            return updateArbre(toArbreDTO(arbre.get()));
+        }
+        throw new EntityNotFoundException();
+    }
+
 
 }
