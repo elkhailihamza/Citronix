@@ -29,7 +29,8 @@ public class ChampService extends GenericServiceImpl<Champ, Long> {
     }
 
     @Transactional
-    public ChampDTO createNewChamp(Champ champ) {
+    public ChampDTO createNewChamp(ChampDTO champDTO) {
+        Champ champ = toChamp(champDTO);
         Champ savedChamp = save(champ);
         return toChampDTO(savedChamp);
     }
@@ -44,9 +45,10 @@ public class ChampService extends GenericServiceImpl<Champ, Long> {
         Champ champ = toChamp(champDTO);
         Optional<Champ> oldChamp = findById(id);
         if (oldChamp.isPresent()) {
-            champ.setId(oldChamp.get().getId());
-            champ = save(champ);
-            return toChampDTO(champ);
+            Champ updatedChamp = oldChamp.get();
+            updatedChamp.setSuperficie(champ.getSuperficie());
+            updatedChamp = save(updatedChamp);
+            return toChampDTO(updatedChamp);
         }
         return null; // throw exception
     }

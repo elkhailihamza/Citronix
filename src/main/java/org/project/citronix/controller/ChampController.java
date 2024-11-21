@@ -17,12 +17,11 @@ public class ChampController {
 
     @PostMapping("/create")
     public ResponseEntity<?> createChamp(@RequestBody @Validated(ChampDTO.Create.class) ChampDTO champDTO) {
-        Champ champ = champService.toChamp(champDTO);
-        return ResponseEntity.ok(champService.createNewChamp(champ));
+        return ResponseEntity.ok(champService.createNewChamp(champDTO));
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<?> updateChamp(@PathVariable long id, @RequestBody @Validated(ChampDTO.Create.class) ChampDTO champDTO) {
+    public ResponseEntity<ChampDTO> updateChamp(@PathVariable long id, @RequestBody @Validated(ChampDTO.Update.class) ChampDTO champDTO) {
         ChampDTO champDTOUpdated = champService.updateChamp(champDTO, id);
         return ResponseEntity.ok(champDTOUpdated);
     }
@@ -37,5 +36,11 @@ public class ChampController {
     public ResponseEntity<?> deleteChamp(@PathVariable long id) {
         champService.deleteChamp(id);
         return ResponseEntity.ok("Deleted successfully!");
+    }
+
+    @PostMapping("/associate/{id}")
+    public ResponseEntity<?> associateChampToFerme(@PathVariable long id, @RequestBody @Validated(ChampDTO.Associate.class) ChampDTO champDTO) {
+        ChampDTO champDTOAssociated = champService.associateToFerme();
+        return ResponseEntity.ok("Associated successfully");
     }
 }

@@ -14,13 +14,15 @@ import java.util.List;
 @NoArgsConstructor
 public class ChampDTO {
     public interface Create extends Default {};
+    public interface Update extends Default {};
+    public interface Associate extends Default {};
 
     private long id;
 
-    @NotNull(message = "Superficie needs to not be null", groups = Create.class)
+    @NotNull(message = "Superficie needs to not be null", groups = {Create.class, Update.class})
     private String superficie;
 
-    @NotNull(message = "Ferme id needs to not be null", groups = Create.class)
+    @NotNull(message = "Ferme id needs to not be null", groups = Associate.class)
     private long fermeId;
     private List<Arbre> arbres;
 }
