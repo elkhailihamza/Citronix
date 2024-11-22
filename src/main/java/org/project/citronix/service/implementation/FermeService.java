@@ -23,28 +23,27 @@ public class FermeService extends GenericServiceImpl<Ferme, Long> {
     }
 
     public Ferme toFerme(FermeDTO fermeDTO) {
-        return fermeMapper.toEntity(fermeDTO);
+        return fermeMapper.toFerme(fermeDTO);
     }
 
     public FermeDTO toFermeDTO(Ferme ferme) {
-        return fermeMapper.toEntityDTO(ferme);
+        return fermeMapper.toFermeDTO(ferme);
     }
 
     @Transactional
-    public ResponseEntity<?> createNewFerme(Ferme ferme) {
-        save(ferme);
-        return ResponseEntity.ok("Ferme Cree!");
+    public FermeDTO createNewFerme(Ferme ferme) {
+        return toFermeDTO(save(ferme));
     }
 
     @Transactional
-    public ResponseEntity<?> updateFerme(FermeDTO fermeDTO) {
+    public FermeDTO updateFerme(FermeDTO fermeDTO) {
         Ferme ferme = toFerme(fermeDTO);
         Optional<Ferme> oldFerme = findById(ferme.getId());
         if (oldFerme.isPresent()) {
             ferme.setId(ferme.getId());
             ferme.setDate_de_creation(oldFerme.get().getDate_de_creation());
             save(ferme);
-            return ResponseEntity.ok("Ferme updated!");
+            return toFermeDTO(ferme);
         }
         throw new EntityNotFoundException();
     }

@@ -15,7 +15,7 @@ public class ChampController {
     private final ChampService champService;
 
     @PostMapping("/create")
-    public ResponseEntity<?> createChamp(@RequestBody @Validated(ChampDTO.Create.class) ChampDTO champDTO) {
+    public ResponseEntity<ChampDTO> createChamp(@RequestBody @Validated(ChampDTO.Create.class) ChampDTO champDTO) {
         return ResponseEntity.ok(champService.createNewChamp(champDTO));
     }
 
@@ -26,14 +26,20 @@ public class ChampController {
     }
 
     @GetMapping("/{id}/view")
-    public ResponseEntity<?> viewChamp(@PathVariable long id) {
+    public ResponseEntity<ChampDTO> viewChamp(@PathVariable long id) {
         ChampDTO champDTO = champService.champDetailsById(id);
         return ResponseEntity.ok(champDTO);
     }
 
     @DeleteMapping("/delete")
-    public ResponseEntity<?> deleteChamp(@RequestBody @Validated(ChampDTO.Delete.class) ChampDTO champDTO) {
+    public ResponseEntity<String> deleteChamp(@RequestBody @Validated(ChampDTO.Delete.class) ChampDTO champDTO) {
         champService.deleteChamp(champDTO);
         return ResponseEntity.ok("Deleted successfully!");
     }
+
+    @PostMapping("/associate/{id}")
+    public ResponseEntity<ChampDTO> associateChampToFerme(@PathVariable long id, @RequestBody @Validated(ChampDTO.Associate.class) ChampDTO champDTO) {
+        return ResponseEntity.ok(champService.associateToFerme(champDTO, id));
+    }
+
 }

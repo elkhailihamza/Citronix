@@ -16,14 +16,14 @@ public class FermeController {
     private final FermeService fermeService;
 
     @PostMapping("/create")
-    public ResponseEntity<?> createFerme(@RequestBody @Validated(FermeDTO.Create.class) FermeDTO fermeDTO) {
+    public ResponseEntity<FermeDTO> createFerme(@RequestBody @Validated(FermeDTO.Create.class) FermeDTO fermeDTO) {
         Ferme ferme = fermeService.toFerme(fermeDTO);
-        return fermeService.createNewFerme(ferme);
+        return ResponseEntity.ok(fermeService.createNewFerme(ferme));
     }
 
     @PutMapping("/update")
-    public ResponseEntity<?> updateFerme(@RequestBody @Validated(FermeDTO.Update.class) FermeDTO fermeDTO) {
-        return fermeService.updateFerme(fermeDTO);
+    public ResponseEntity<FermeDTO> updateFerme(@RequestBody @Validated(FermeDTO.Update.class) FermeDTO fermeDTO) {
+        return ResponseEntity.ok(fermeService.updateFerme(fermeDTO));
     }
 
     @DeleteMapping("/delete")

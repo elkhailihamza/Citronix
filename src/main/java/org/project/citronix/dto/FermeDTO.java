@@ -1,8 +1,6 @@
 package org.project.citronix.dto;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import jakarta.validation.groups.Default;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -21,7 +19,6 @@ public class FermeDTO {
     public interface Delete extends Default {};
 
     @NotNull(message = "Id needs to not be null!", groups = {Update.class, Delete.class})
-    @NotBlank(message = "Id needs to not be blank!", groups = {Update.class, Delete.class})
     private long id;
 
     @NotNull(message = "Nom needs to not be null!", groups = {Create.class, Update.class})
@@ -29,9 +26,9 @@ public class FermeDTO {
     @Size(min = 3, message = "Nom needs to be at least 3 characters long!", groups = {Create.class, Update.class})
     private String nom;
 
-    @NotNull(message = "Superficie needs to not be null!", groups = {Create.class, Update.class})
-    @NotBlank(message = "Superficie needs to not be null!", groups = {Create.class, Update.class})
-    private String superficie;
+    @DecimalMin(value = "0.1", message = "Superficie must be greater than or equal to 0.1", groups = {ChampDTO.Create.class, ChampDTO.Update.class})
+    @DecimalMax(value = "100000.0", message = "Superficie must be less than or equal to 100,000", groups = {ChampDTO.Create.class, ChampDTO.Update.class})
+    private double superficie;
 
     @NotNull(message = "Localisation needs to not be null!", groups = {Create.class, Update.class})
     @NotBlank(message = "Localisation needs to not be null!", groups = {Create.class, Update.class})

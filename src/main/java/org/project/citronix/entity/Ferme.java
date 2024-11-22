@@ -1,5 +1,6 @@
 package org.project.citronix.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -7,8 +8,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
-@Table(name = "Ferme")
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -18,7 +17,7 @@ public class Ferme {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String nom;
-    private String superficie;
+    private double superficie;
     private String localisation;
     private LocalDateTime date_de_creation;
 
@@ -30,5 +29,6 @@ public class Ferme {
     }
 
     @OneToMany(mappedBy = "ferme")
+    @JsonIgnore
     private List<Champ> champs;
 }
