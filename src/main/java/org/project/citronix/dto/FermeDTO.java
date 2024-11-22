@@ -19,7 +19,6 @@ public class FermeDTO {
     public interface Delete extends Default {};
 
     @NotNull(message = "Id needs to not be null!", groups = {Update.class, Delete.class})
-    @NotBlank(message = "Id needs to not be blank!", groups = {Update.class, Delete.class})
     private long id;
 
     @NotNull(message = "Nom needs to not be null!", groups = {Create.class, Update.class})
