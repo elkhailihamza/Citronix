@@ -23,11 +23,11 @@ public class FermeService extends GenericServiceImpl<Ferme, Long> {
     }
 
     public Ferme toFerme(FermeDTO fermeDTO) {
-        return fermeMapper.toEntity(fermeDTO);
+        return fermeMapper.toFerme(fermeDTO);
     }
 
     public FermeDTO toFermeDTO(Ferme ferme) {
-        return fermeMapper.toEntityDTO(ferme);
+        return fermeMapper.toFermeDTO(ferme);
     }
 
     @Transactional

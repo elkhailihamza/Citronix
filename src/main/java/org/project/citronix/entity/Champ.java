@@ -1,5 +1,6 @@
 package org.project.citronix.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -21,5 +22,6 @@ public class Champ {
     private Ferme ferme;
 
     @OneToMany(mappedBy = "champ")
+    @JsonIgnore
     private List<Arbre> arbres;
 }

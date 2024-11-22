@@ -7,6 +7,7 @@ import jakarta.validation.groups.Default;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.project.citronix.entity.Champ;
 import org.project.citronix.entity.RecolteDetails;
 
 import java.time.LocalDateTime;
@@ -29,6 +30,8 @@ public class ArbreDTO {
     private LocalDateTime date_de_plantation;
 
     private int age;
+
+    private Champ champ;
 
     @NotNull(message = "Champ id mustn't be null!", groups = Association.class)
     private long champId;

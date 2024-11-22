@@ -27,11 +27,11 @@ public class ChampService extends GenericServiceImpl<Champ, Long> {
     }
 
     public Champ toChamp(ChampDTO champDTO) {
-        return champMapper.toEntity(champDTO);
+        return champMapper.toChamp(champDTO);
     }
 
     public ChampDTO toChampDTO(Champ champ) {
-        return champMapper.toEntityDTO(champ);
+        return champMapper.toChampDTO(champ);
     }
 
     @Transactional
@@ -68,9 +68,9 @@ public class ChampService extends GenericServiceImpl<Champ, Long> {
     }
 
     @Transactional
-    public ChampDTO associateToFerme(ChampDTO champDTO) {
+    public ChampDTO associateToFerme(ChampDTO champDTO, long fermeId) {
         Optional<Champ> champ = findById(champDTO.getId());
-        Optional<Ferme> ferme = fermeService.findById(champDTO.getFermeId());
+        Optional<Ferme> ferme = fermeService.findById(fermeId);
         if (champ.isPresent() && ferme.isPresent()) {
             FermeDTO fermeDTO = fermeService.toFermeDTO(ferme.get());
             checkIfSuperficieIsCompatible(fermeDTO, champDTO);
@@ -89,7 +89,7 @@ public class ChampService extends GenericServiceImpl<Champ, Long> {
             reason = "Champ superficie surpasses 50% of ferme total superficie!";
         }
 
-        double spaceTaken = repository.sumAllChampSuperficieByFermeId(fermeDTO.getId());
+        double spaceTaken = repository.sumAllChampSuperficieByFermeId(fermeDTO.getId()).orElse(0.0);
         if (fermeDTO.getSuperficie() < champDTO.getSuperficie() + spaceTaken) {
             compatible = false;
             reason = "The surface area of the Champ exceeds the available space in the Ferme.";

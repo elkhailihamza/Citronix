@@ -40,9 +40,9 @@ public class ArbreController {
         return ResponseEntity.ok("Deleted successfully!");
     }
 
-    @PostMapping("/associate")
-    public ResponseEntity<ArbreDTO> associateArbreToChamp(@RequestBody @Validated(ArbreDTO.Association.class) ArbreDTO arbreDTO) {
-        return ResponseEntity.ok(arbreService.associateToChamp(arbreDTO));
+    @PostMapping("/associate/{id}")
+    public ResponseEntity<ArbreDTO> associateArbreToChamp(@PathVariable long id, @RequestBody @Validated(ArbreDTO.Association.class) ArbreDTO arbreDTO) {
+        return ResponseEntity.ok(arbreService.associateToChamp(arbreDTO, id));
     }
 
     @GetMapping("/annual/production")

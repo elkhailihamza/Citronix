@@ -29,11 +29,11 @@ public class ArbreService extends GenericServiceImpl<Arbre, Long> {
     }
 
     public Arbre toArbre(ArbreDTO arbreDTO) {
-        return arbreMapper.toEntity(arbreDTO);
+        return arbreMapper.toArbre(arbreDTO);
     }
 
     public ArbreDTO toArbreDTO(Arbre arbre) {
-        return arbreMapper.toEntityDTO(arbre);
+        return arbreMapper.toArbreDTO(arbre);
     }
 
     @Transactional
@@ -78,9 +78,9 @@ public class ArbreService extends GenericServiceImpl<Arbre, Long> {
     }
 
     @Transactional
-    public ArbreDTO associateToChamp(ArbreDTO arbreDTO) {
+    public ArbreDTO associateToChamp(ArbreDTO arbreDTO, long champId) {
         Optional<Arbre> arbre = findById(arbreDTO.getId());
-        Optional<Champ> champ = champService.findById(arbreDTO.getChampId());
+        Optional<Champ> champ = champService.findById(champId);
         if (arbre.isPresent() && champ.isPresent()) {
             arbre.get().setChamp(champ.get());
             return updateArbre(toArbreDTO(arbre.get()));

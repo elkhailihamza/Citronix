@@ -9,6 +9,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.project.citronix.entity.Arbre;
+import org.project.citronix.entity.Ferme;
 
 import java.util.List;
 
@@ -27,6 +28,8 @@ public class ChampDTO {
     @DecimalMin(value = "0.1", message = "Superficie must be greater than or equal to 0.1", groups = {Create.class, Update.class})
     @DecimalMax(value = "100000.0", message = "Superficie must be less than or equal to 100,000", groups = {Create.class, Update.class})
     private double superficie;
+
+    private Ferme ferme;
 
     @NotNull(message = "Ferme id needs to not be null", groups = {Update.class, Associate.class})
     private long fermeId;
