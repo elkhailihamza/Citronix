@@ -31,9 +31,8 @@ public class FermeService extends GenericServiceImpl<Ferme, Long> {
     }
 
     @Transactional
-    public ResponseEntity<?> createNewFerme(Ferme ferme) {
-        save(ferme);
-        return ResponseEntity.ok("Ferme Cree!");
+    public FermeDTO createNewFerme(Ferme ferme) {
+        return toFermeDTO(save(ferme));
     }
 
     @Transactional
