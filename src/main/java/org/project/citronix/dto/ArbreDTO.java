@@ -30,8 +30,10 @@ public class ArbreDTO {
 
     private int age;
 
-    @NotNull(message = "Champ id mustn't be null!", groups = {Association.class, Update.class})
+    @NotNull(message = "Champ id mustn't be null!", groups = Association.class)
     private long champId;
+
+    private int annualProduction;
 
     private List<RecolteDetails> recolteDetails;
 }
