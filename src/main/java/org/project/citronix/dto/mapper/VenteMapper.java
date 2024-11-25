@@ -4,7 +4,7 @@ import org.mapstruct.Mapper;
 import org.project.citronix.dto.VenteDTO;
 import org.project.citronix.entity.Vente;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface VenteMapper {
     Vente toVente(VenteDTO venteDTO);
     VenteDTO toVenteDTO(Vente vente);

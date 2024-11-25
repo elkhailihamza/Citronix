@@ -2,6 +2,7 @@ package org.project.citronix.service.implementation;
 
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
+import org.project.citronix.dto.RevenuTotalDTO;
 import org.project.citronix.dto.VenteDTO;
 import org.project.citronix.dto.mapper.VenteMapper;
 import org.project.citronix.entity.Vente;
@@ -59,5 +60,14 @@ public class VenteService extends GenericServiceImpl<Vente, Long> {
     public VenteDTO venteDetailsById(long id) {
         Optional<Vente> vente = findById(id);
         return vente.map(this::toVenteDTO).orElseThrow(EntityNotFoundException::new);
+    }
+
+    public RevenuTotalDTO calcRevenuTotal(long id) {
+        Optional<Vente> venteOpt = findById(id);
+        if (venteOpt.isPresent()) {
+            Vente vente = venteOpt.get();
+            return new RevenuTotalDTO(vente.getId(), vente.getPrix_unitaire() * vente.getRecolte().getQuantiteTotale());
+        }
+        throw new EntityNotFoundException();
     }
 }

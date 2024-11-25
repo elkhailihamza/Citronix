@@ -1,8 +1,9 @@
 package org.project.citronix.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.project.citronix.dto.ArbreDTO;
 import org.project.citronix.dto.RecolteDTO;
-import org.project.citronix.dto.RecolteDetailsDTO;
+import org.project.citronix.dto.RecolteToArbresDTO;
 import org.project.citronix.service.implementation.RecolteService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -35,11 +36,6 @@ public class RecolteController {
     public ResponseEntity<RecolteDTO> viewRecolteDetails(@PathVariable long id) {
         RecolteDTO recolteDTO = recolteService.recolteDetailsById(id);
         return ResponseEntity.ok(recolteDTO);
-    }
-
-    @PostMapping("/{id}/associate")
-    public ResponseEntity<RecolteDTO> associateRecolteToArbres(@PathVariable long id) {
-        return null;
     }
 
 }

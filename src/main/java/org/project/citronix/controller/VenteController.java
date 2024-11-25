@@ -1,6 +1,7 @@
 package org.project.citronix.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.project.citronix.dto.RevenuTotalDTO;
 import org.project.citronix.dto.VenteDTO;
 import org.project.citronix.service.implementation.VenteService;
 import org.springframework.http.ResponseEntity;
@@ -34,5 +35,10 @@ public class VenteController {
     public ResponseEntity<VenteDTO> viewVenteDetails(@PathVariable long id) {
         VenteDTO venteDTO = venteService.venteDetailsById(id);
         return ResponseEntity.ok(venteDTO);
+    }
+
+    @GetMapping("/{id}/calculate/total")
+    public ResponseEntity<RevenuTotalDTO> calcRevenuTotal(@PathVariable long id) {
+        return ResponseEntity.ok(venteService.calcRevenuTotal(id));
     }
 }

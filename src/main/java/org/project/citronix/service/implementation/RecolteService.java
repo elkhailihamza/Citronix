@@ -3,22 +3,35 @@ package org.project.citronix.service.implementation;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.project.citronix.dto.RecolteDTO;
+import org.project.citronix.dto.RecolteToArbresDTO;
 import org.project.citronix.dto.mapper.RecolteMapper;
+import org.project.citronix.entity.Arbre;
 import org.project.citronix.entity.Recolte;
+import org.project.citronix.entity.RecolteDetails;
+import org.project.citronix.repository.ArbreRepository;
+import org.project.citronix.repository.RecolteDetailsRepository;
 import org.project.citronix.repository.RecolteRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
 public class RecolteService extends GenericServiceImpl<Recolte, Long> {
     private final RecolteRepository repository;
     private final RecolteMapper recolteMapper;
+    private final RecolteDetailsRepository recolteDetailsRepository;
+    private final RecolteRepository recolteRepository;
+    private final ArbreRepository arbreRepository;
 
-    public RecolteService(RecolteRepository repository, RecolteMapper recolteMapper) {
+    public RecolteService(RecolteRepository repository, RecolteMapper recolteMapper,
+                          RecolteDetailsRepository recolteDetailsRepository, RecolteRepository recolteRepository, ArbreRepository arbreRepository) {
         super(repository);
         this.repository = repository;
         this.recolteMapper = recolteMapper;
+        this.recolteDetailsRepository = recolteDetailsRepository;
+        this.recolteRepository = recolteRepository;
+        this.arbreRepository = arbreRepository;
     }
 
     public Recolte toRecolte(RecolteDTO recolteDTO) {

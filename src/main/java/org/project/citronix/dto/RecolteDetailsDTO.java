@@ -1,33 +1,32 @@
 package org.project.citronix.dto;
 
+import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.groups.Default;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.project.citronix.entity.Client;
+import org.project.citronix.entity.Arbre;
 import org.project.citronix.entity.Recolte;
-
-import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class VenteDTO {
+public class RecolteDetailsDTO {
     public interface Create extends Default {};
     public interface Update extends Default {};
     public interface Delete extends Default {};
+    public interface Log extends Default {};
 
-    @NotNull(groups = Delete.class)
+    @NotNull(groups = RecolteDTO.Delete.class)
     private long id;
-    private LocalDateTime date;
 
-    @NotNull(groups = {Create.class, Update.class})
-    private double prix_unitaire;
+    @NotNull(groups = {Create.class, Update.class, Log.class})
+    private double quantite;
 
-    @NotNull(groups = {Create.class, Update.class})
+    @NotNull(groups = {Create.class, Update.class, Log.class})
     private Recolte recolte;
 
-    @NotNull(groups = {Create.class, Update.class})
-    private Client client;
+    @NotNull(groups = {Create.class, Update.class, Log.class})
+    private Arbre arbre;
 }

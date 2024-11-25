@@ -19,10 +19,15 @@ import java.util.List;
 @AllArgsConstructor
 public class RecolteDTO {
     public interface Create extends Default {};
+    public interface Update extends Default {};
+    public interface Delete extends Default {};
 
+    @NotNull(groups = Delete.class)
     private long id;
 
     private LocalDateTime recolte_date;
+
+    @NotNull(message = "Change total quantity!", groups = Update.class)
     private int quantiteTotale;
 
     private List<RecolteDetails> recolteDetails;
