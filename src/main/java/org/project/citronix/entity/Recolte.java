@@ -1,10 +1,12 @@
 package org.project.citronix.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.project.citronix.entity.type.Season;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -23,8 +25,13 @@ public class Recolte {
     private int quantiteTotale;
 
     @OneToMany(mappedBy = "recolte")
+    @JsonIgnore
     private List<RecolteDetails> recolteDetails;
 
+    @Enumerated(EnumType.STRING)
+    private Season season;
+
     @OneToMany(mappedBy = "recolte")
+    @JsonIgnore
     private List<Vente> ventes;
 }

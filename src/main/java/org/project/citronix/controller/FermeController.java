@@ -1,12 +1,15 @@
 package org.project.citronix.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.project.citronix.dto.FermeCriteriaDTO;
 import org.project.citronix.dto.FermeDTO;
 import org.project.citronix.entity.Ferme;
 import org.project.citronix.service.implementation.FermeService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/ferme")
@@ -36,5 +39,11 @@ public class FermeController {
     public ResponseEntity<FermeDTO> viewFermeDetails(@PathVariable long id) {
         FermeDTO fermeDTO = fermeService.fermeDetailsById(id);
         return ResponseEntity.ok(fermeDTO);
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<FermeDTO>> searchFermes(@RequestBody FermeCriteriaDTO fermeCriteriaDTO) {
+        List<FermeDTO> result = fermeService.searchFermes(fermeCriteriaDTO);
+        return ResponseEntity.ok(result);
     }
 }

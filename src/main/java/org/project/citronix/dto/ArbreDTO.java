@@ -21,8 +21,9 @@ public class ArbreDTO {
     public interface Update extends Default {};
     public interface Delete extends Default {};
     public interface Association extends Default {};
+    public interface Quantity extends Default {};
 
-    @NotNull(groups = Delete.class)
+    @NotNull(groups = {Delete.class, Quantity.class})
     private long id;
 
     @NotNull(message = "Date de plantation mustn't be null!", groups = {Create.class, Update.class})
