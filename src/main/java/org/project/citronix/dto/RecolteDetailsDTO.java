@@ -21,10 +21,10 @@ public class RecolteDetailsDTO {
     @NotNull(groups = RecolteDTO.Delete.class)
     private long id;
 
-    @NotNull(groups = {Create.class, Update.class, Log.class})
+    @NotNull(groups = {Update.class, Log.class})
     private double quantite;
 
-    @NotNull(groups = {Create.class, Update.class, Log.class})
+    @NotNull(groups = {Update.class, Log.class})
     private Recolte recolte;
 
     @NotNull(groups = {Create.class, Update.class, Log.class})

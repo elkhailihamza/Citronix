@@ -9,6 +9,7 @@ import org.project.citronix.entity.Vente;
 import org.project.citronix.repository.VenteRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
@@ -33,6 +34,7 @@ public class VenteService extends GenericServiceImpl<Vente, Long> {
     @Transactional
     public VenteDTO createNewVente(VenteDTO venteDTO) {
         Vente vente = toVente(venteDTO);
+        vente.setDate(LocalDateTime.now());
         return toVenteDTO(save(vente));
     }
 

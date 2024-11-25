@@ -1,5 +1,6 @@
 package org.project.citronix.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Past;
@@ -27,6 +28,7 @@ public class ArbreDTO {
     private long id;
 
     @NotNull(message = "Date de plantation mustn't be null!", groups = {Create.class, Update.class})
+    @JsonFormat(pattern = "yyyy-M-d'T'HH:mm:ss.SSSSSS")
     @Past(message = "Date mustn't be in the future!", groups = {Create.class, Update.class})
     private LocalDateTime date_de_plantation;
 

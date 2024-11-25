@@ -18,17 +18,17 @@ public class RecolteDetailsController {
     private final RecolteDetailsService recolteDetailsService;
 
     @PostMapping("/create")
-    public RecolteDetailsDTO createRecolte(@RequestBody @Validated(RecolteDetailsDTO.Create.class) RecolteDetailsDTO recolteDetailsDTO) {
+    public RecolteDetailsDTO createRecolteDetails(@RequestBody @Validated(RecolteDetailsDTO.Create.class) RecolteDetailsDTO recolteDetailsDTO) {
         return recolteDetailsService.createNewRecolteDetails(recolteDetailsDTO);
     }
 
     @PutMapping("/update")
-    public ResponseEntity<RecolteDetailsDTO> updateRecolte(@RequestBody @Validated(RecolteDetailsDTO.Update.class) RecolteDetailsDTO recolteDetailsDTO) {
+    public ResponseEntity<RecolteDetailsDTO> updateRecolteDetails(@RequestBody @Validated(RecolteDetailsDTO.Update.class) RecolteDetailsDTO recolteDetailsDTO) {
         return ResponseEntity.ok(recolteDetailsService.updateRecolteDetails(recolteDetailsDTO));
     }
 
     @DeleteMapping("/delete")
-    public ResponseEntity<?> deleteRecolte(@RequestBody @Validated(RecolteDetailsDTO.Delete.class) RecolteDetailsDTO recolteDetailsDTO) {
+    public ResponseEntity<?> deleteRecolteDetails(@RequestBody @Validated(RecolteDetailsDTO.Delete.class) RecolteDetailsDTO recolteDetailsDTO) {
         recolteDetailsService.deleteRecolteDetails(recolteDetailsDTO);
         return ResponseEntity.ok("Deleted successfully!");
     }

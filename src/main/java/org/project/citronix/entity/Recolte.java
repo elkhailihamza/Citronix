@@ -22,7 +22,7 @@ public class Recolte {
     private long id;
 
     private LocalDateTime recolte_date;
-    private int quantiteTotale;
+    private double quantiteTotale;
 
     @OneToMany(mappedBy = "recolte")
     @JsonIgnore

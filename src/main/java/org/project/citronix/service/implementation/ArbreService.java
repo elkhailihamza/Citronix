@@ -7,11 +7,14 @@ import org.project.citronix.dto.ArbreProductionDTO;
 import org.project.citronix.dto.mapper.ArbreMapper;
 import org.project.citronix.entity.Arbre;
 import org.project.citronix.entity.Champ;
+import org.project.citronix.exception.ArbreDateNotCompatible;
+import org.project.citronix.exception.SuperficieNonCompatibleException;
 import org.project.citronix.exception.ValueNotExpectedException;
 import org.project.citronix.repository.ArbreRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.Period;
 import java.util.Optional;
 
@@ -38,6 +41,13 @@ public class ArbreService extends GenericServiceImpl<Arbre, Long> {
 
     @Transactional
     public ArbreDTO createNewArbre(ArbreDTO arbreDTO) {
+        LocalDateTime arbreDate = arbreDTO.getDate_de_plantation();
+        int currentMonth = arbreDate.getMonthValue();
+
+        if (currentMonth < 3 || currentMonth > 5) {
+            throw new ArbreDateNotCompatible("Planting is only allowed between March and May.");
+        }
+
         Arbre arbre = save(toArbre(arbreDTO));
         return toArbreDTO(arbre);
     }
@@ -79,22 +89,23 @@ public class ArbreService extends GenericServiceImpl<Arbre, Long> {
 
     @Transactional
     public ArbreDTO associateToChamp(ArbreDTO arbreDTO, long champId) {
-        Optional<Arbre> arbre = findById(arbreDTO.getId());
-        Optional<Champ> champ = champService.findById(champId);
-        if (arbre.isPresent() && champ.isPresent()) {
-            arbre.get().setChamp(champ.get());
-            return updateArbre(toArbreDTO(arbre.get()));
+        Arbre arbre = findById(arbreDTO.getId()).orElseThrow(EntityNotFoundException::new);
+        Champ champ = champService.findById(champId).orElseThrow(EntityNotFoundException::new);
+
+        int arbreCount = champ.getArbres().size();
+        double maxArbreCapacity = champ.getSuperficie() / 100;
+        if (arbreCount >= maxArbreCapacity) {
+            throw new SuperficieNonCompatibleException("Chaque champ doit contenir un nombre d'arbres tel que la densité maximale est de 100 arbres par hectare (10 arbres par 1 000 m²)");
         }
-        throw new EntityNotFoundException();
+
+        arbre.setChamp(champ);
+        return updateArbre(toArbreDTO(arbre));
     }
 
     public ArbreProductionDTO calcYearlyProduction(ArbreProductionDTO arbreProductionDTO) {
-        Optional<Arbre> arbre = findById(arbreProductionDTO.getId());
-        if (arbre.isEmpty()) {
-            throw new EntityNotFoundException("Arbre with ID " + arbreProductionDTO.getId() + " not found");
-        }
+        Arbre arbre = findById(arbreProductionDTO.getId()).orElseThrow(EntityNotFoundException::new);
 
-        ArbreDTO arbreDTO = toArbreDTO(arbre.get());
+        ArbreDTO arbreDTO = toArbreDTO(arbre);
         int age = calcArbreAge(arbreDTO).getYears();
         arbreProductionDTO.setAge(age);
 
@@ -105,14 +116,16 @@ public class ArbreService extends GenericServiceImpl<Arbre, Long> {
         return arbreProductionDTO;
     }
 
-    private double seasonalProduction(ArbreProductionDTO arbreProductionDTO) {
+    public double seasonalProduction(ArbreProductionDTO arbreProductionDTO) {
         int age = arbreProductionDTO.getAge();
         if (age < 3) {
             return 2.5;
         } else if (age > 3 && age < 10) {
             return 12;
-        } else if (age > 10) {
+        } else if (age > 10 && age < 20) {
             return 20;
+        } else if (age > 20) {
+            return 0; // non-productive
         }
         throw new ValueNotExpectedException("Age value not expected!");
     }
