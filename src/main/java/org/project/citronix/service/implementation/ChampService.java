@@ -4,9 +4,12 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.project.citronix.dto.ChampDTO;
 import org.project.citronix.dto.FermeDTO;
+import org.project.citronix.dto.RecolteDTO;
 import org.project.citronix.dto.mapper.ChampMapper;
 import org.project.citronix.entity.Champ;
 import org.project.citronix.entity.Ferme;
+import org.project.citronix.entity.Recolte;
+import org.project.citronix.exception.PlusDeDixChampsException;
 import org.project.citronix.exception.SuperficieNonCompatibleException;
 import org.project.citronix.repository.ChampRepository;
 import org.springframework.stereotype.Service;
@@ -69,15 +72,17 @@ public class ChampService extends GenericServiceImpl<Champ, Long> {
 
     @Transactional
     public ChampDTO associateToFerme(ChampDTO champDTO, long fermeId) {
-        Optional<Champ> champ = findById(champDTO.getId());
-        Optional<Ferme> ferme = fermeService.findById(fermeId);
-        if (champ.isPresent() && ferme.isPresent()) {
-            FermeDTO fermeDTO = fermeService.toFermeDTO(ferme.get());
-            checkIfSuperficieIsCompatible(fermeDTO, champDTO);
-            champ.get().setFerme(ferme.get());
-            return updateChamp(toChampDTO(champ.get()));
+        Champ champ = findById(champDTO.getId()).orElseThrow(EntityNotFoundException::new);
+        Ferme ferme = fermeService.findById(fermeId).orElseThrow(EntityNotFoundException::new);
+
+        if (ferme.getChamps().size() >= 10) {
+            throw new PlusDeDixChampsException("Plus de dix champs in ferme!");
         }
-        throw new EntityNotFoundException();
+
+        FermeDTO fermeDTO = fermeService.toFermeDTO(ferme);
+        checkIfSuperficieIsCompatible(fermeDTO, champDTO);
+        champ.setFerme(ferme);
+        return updateChamp(toChampDTO(champ));
     }
 
     private void checkIfSuperficieIsCompatible(FermeDTO fermeDTO, ChampDTO champDTO) {

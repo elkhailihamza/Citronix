@@ -32,6 +32,9 @@ public class RecolteDTO {
 
     private List<RecolteDetails> recolteDetails;
 
+    @NotNull(groups = Create.class)
+    private List<Long> recolteDetailsIds;
+
     @NotNull(message = "Season mustn't be null!", groups = {Create.class})
     private Season season;
 

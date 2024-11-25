@@ -2,10 +2,12 @@ package org.project.citronix.service.implementation;
 
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
+import org.project.citronix.dto.ArbreProductionDTO;
 import org.project.citronix.dto.RecolteDetailsDTO;
 import org.project.citronix.dto.RecolteToArbresDTO;
 import org.project.citronix.dto.mapper.RecolteDetailsMapper;
 import org.project.citronix.entity.Arbre;
+import org.project.citronix.entity.Champ;
 import org.project.citronix.entity.Recolte;
 import org.project.citronix.entity.RecolteDetails;
 import org.project.citronix.repository.ArbreRepository;
@@ -13,6 +15,8 @@ import org.project.citronix.repository.RecolteDetailsRepository;
 import org.project.citronix.repository.RecolteRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.Period;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -23,13 +27,15 @@ public class RecolteDetailsService extends GenericServiceImpl<RecolteDetails, Lo
     private final RecolteDetailsMapper recolteDetailsMapper;
     private final ArbreRepository arbreRepository;
     private final RecolteRepository recolteRepository;
+    private final ArbreService arbreService;
 
-    public RecolteDetailsService(RecolteDetailsRepository repository, RecolteDetailsMapper recolteDetailsMapper, ArbreRepository arbreRepository, RecolteRepository recolteRepository) {
+    public RecolteDetailsService(RecolteDetailsRepository repository, RecolteDetailsMapper recolteDetailsMapper, ArbreRepository arbreRepository, RecolteRepository recolteRepository, ArbreService arbreService) {
         super(repository);
         this.repository = repository;
         this.recolteDetailsMapper = recolteDetailsMapper;
         this.arbreRepository = arbreRepository;
         this.recolteRepository = recolteRepository;
+        this.arbreService = arbreService;
     }
 
     public RecolteDetails toRecolteDetails (RecolteDetailsDTO recolteDetailsDTO) {
@@ -43,6 +49,16 @@ public class RecolteDetailsService extends GenericServiceImpl<RecolteDetails, Lo
     @Transactional
     public RecolteDetailsDTO createNewRecolteDetails(RecolteDetailsDTO recolteDetailsDTO) {
         RecolteDetails recolteDetails = toRecolteDetails(recolteDetailsDTO);
+        Arbre arbre = arbreRepository.findById(recolteDetails.getArbre().getId()).orElseThrow(EntityNotFoundException::new);
+
+        Champ champ = arbre.getChamp();
+        if (champ == null) {
+            throw new EntityNotFoundException();
+        }
+
+        recolteDetails.setQuantite(arbreService.seasonalProduction(arbreService.calcYearlyProduction(ArbreProductionDTO.builder().id(arbre.getId()).build())));
+
+        recolteDetails.setArbre(arbre);
         return toRecolteDetailsDTO(save(recolteDetails));
     }
 
