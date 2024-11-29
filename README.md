@@ -50,7 +50,7 @@ Citronix est une application Spring Boot de gestion pour une ferme de citron. El
     mvn spring-boot:run
     ```
 
-6. L'application devrait maintenant être accessible à `http://localhost:8080`.
+6. L'application devrait maintenant être accessible à `http://localhost:8081`.
 
 ## Tests
 
